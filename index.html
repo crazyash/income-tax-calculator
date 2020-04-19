@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    function toINR(money) {
+      var x = document.getElementById(money);
+      var amount = parseInt(x.value.replace(/,/g, ""));
+      if (!Number.isNaN(amount))
+        x.value = amount.toLocaleString('en-IN');
+    }
+
+    function calculateIncomeTax() {
+      var s = document.getElementById('salary').value.replace(/,/g, "");
+      var regime = document.getElementById('regime').value;
+      var result = 0;
+      if (regime=="old") {
+        if (s > 1500000) {
+          result = result + ((s - 1500000) * 0.3);
+          s = 1500000;
+        }
+        if (s > 1250000) {
+          result = result + ((s - 1250000) * 0.3);
+          s = 1250000;
+        }
+        if (s > 1000000) {
+          result = result + ((s - 1000000) * 0.3);
+          s = 1000000;
+        }
+        if (s > 750000) {
+          result = result + ((s - 750000) * 0.2);
+          s = 750000;
+        }
+        if (s > 500000) {
+          result = result + ((s - 500000) * 0.2);
+          s = 500000;
+        }
+        if (s > 250000) {
+          result = result + ((s - 250000) * 0.05);
+          s = 250000;
+        }
+      }
+      else{
+        if (s > 1500000) {
+          result = result + ((s - 1500000) * 0.3);
+          s = 1500000;
+        }
+        if (s > 1250000) {
+          result = result + ((s - 1250000) * 0.25);
+          s = 1250000;
+        }
+        if (s > 1000000) {
+          result = result + ((s - 1000000) * 0.2);
+          s = 1000000;
+        }
+        if (s > 750000) {
+          result = result + ((s - 750000) * 0.15);
+          s = 750000;
+        }
+        if (s > 500000) {
+          result = result + ((s - 500000) * 0.1);
+          s = 500000;
+        }
+        if (s > 250000) {
+          result = result + ((s - 250000) * 0.05);
+          s = 250000;
+        }
+      }
+
+      document.getElementsByClassName('results')[0].hidden = false;
+      document.getElementsByClassName('results')[1].hidden = false;
+      document.getElementById('taxResult').innerHTML = "Rs. " + result.toLocaleString('en-IN');
+    }
+  </script>
+  <style>
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      border: 1px solid #ddd;
+    }
+
+    thead {
+      border: 2px solid #ddd;
+    }
+
+    th,
+    td {
+      text-align: center;
+      padding: 5px;
+    }
+
+    th:first-child,
+    td:first-child {
+      text-align: left;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2
+    }
+
+    .fa-check {
+      color: green;
+    }
+
+    .fa-remove {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2 align="center">Income Tax Slabs</h2>
+
+  <table class="table table-curved doc-table" align="center">
+    <thead>
+      <tr>
+        <th class="th" width="25%">Income Range per Annum</th>
+        <th class="th">New Slabs for FY 2020-21</th>
+        <th class="th">Old Slabs for FY 2019-20 (optional from FY2020-21)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Up to Rs. 2.5 lakhs</td>
+        <td>No Tax</td>
+        <td>No tax</td>
+      </tr>
+      <tr>
+        <td>Above Rs. 2.5 lakhs to Rs. 5 lakhs</td>
+        <td>5%</td>
+        <td>5%</td>
+      </tr>
+      <tr>
+        <td>Above Rs. 5 lakhs to Rs. 7.5 lakhs</td>
+        <td>10%</td>
+        <td>20%</td>
+      </tr>
+      <tr>
+        <td>Above Rs. 7.5 lakhs to Rs. 10 lakhs</td>
+        <td>15%</td>
+        <td>20%</td>
+      </tr>
+      <tr>
+        <td>Above Rs. 10 lakhs to Rs. 12.5 lakhs</td>
+        <td>20%</td>
+        <td>30%</td>
+      </tr>
+      <tr>
+        <td>Above Rs. 12.5 lakhs to Rs. 15 lakhs</td>
+        <td>25%</td>
+        <td>30%</td>
+      </tr>
+      <tr>
+        <td>Above Rs. 15 lakhs</td>
+        <td>30%</td>
+        <td>30%</td>
+      </tr>
+    </tbody>
+  </table>
+  <br /><br />
+
+  <form onsubmit="calculateIncomeTax(); return false;" method="post" autocomplete="off">
+
+    <table align="center">
+      <tr>
+        <td colspan="2" style="text-align: center;">
+          <select id="regime" name="regime">
+            <option value="old" selected="selected">Old Regime</option>
+            <option value="new">New Regime</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="labels">Salary(Rs.)</p>
+        </td>
+        <td>
+          <input type="text" id="salary" name="salary" placeholder="Salary" onkeyup="toINR('salary')" required
+            pattern="[0-9,]+" />
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" style="text-align: center;"><input type="submit" id="calculate" class="submitMain"
+            name="calculate" value="Calculate" />
+          <input type="reset" id="clear" class="submitMain" name="clear" value="Clear"
+            onclick="clearForm('taxResult');" /></td>
+      </tr>
+
+      <tr class="results" hidden="hidden">
+        <td colspan="2" style="text-align: center;">
+          <p class="results" id="taxResult" hidden="hidden"></p>
+        </td>
+      </tr>
+
+
+    </table>
+
+
+  </form>
+
+</body>
+
+</html>
